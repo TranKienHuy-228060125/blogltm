@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React.js - Thư viện JavaScript phổ biến nhất - Developer Blog</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <h2>DEV BLOG</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="../index.html">Trang chủ</a></li>
+                <li><a href="../about.html">Giới thiệu</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="article-hero">
+        <div class="container">
+            <div class="article-header">
+                <span class="blog-category">JavaScript</span>
+                <h1>React.js - Thư viện JavaScript phổ biến nhất</h1>
+                <div class="article-meta">
+                    <span>📅 24/10/2025</span>
+                    <span>⏱️ 14 phút đọc</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="article-content">
+        <div class="container">
+            <article class="article-body">
+                <h2>React là gì?</h2>
+                <p>
+                    React là một JavaScript library để build user interfaces, được develop bởi Facebook 
+                    (nay là Meta) và released vào 2013. React cho phép developers tạo large web applications 
+                    có thể change data mà không cần reload page. Nó được design để simple, flexible và efficient.
+                </p>
+
+                <h2>Tại sao React phổ biến?</h2>
+                <ul>
+                    <li><strong>Component-Based:</strong> Build encapsulated components quản lý state riêng</li>
+                    <li><strong>Declarative:</strong> Design simple views cho mỗi state trong app</li>
+                    <li><strong>Learn Once, Write Anywhere:</strong> React Native cho mobile apps</li>
+                    <li><strong>Virtual DOM:</strong> Fast và efficient rendering</li>
+                    <li><strong>Huge Ecosystem:</strong> Tons of libraries và tools</li>
+                    <li><strong>Strong Community:</strong> Được support bởi Facebook và community lớn</li>
+                </ul>
+
+                <h2>Core Concepts</h2>
+
+                <h3>1. JSX - JavaScript XML</h3>
+                <p>
+                    JSX là syntax extension cho JavaScript, cho phép viết HTML-like code trong JavaScript.
+                </p>
+                <pre><code>// JSX
+const element = &lt;h1&gt;Hello, World!&lt;/h1&gt;;
+
+// Expressions in JSX
+const name = "John";
+const greeting = &lt;h1&gt;Hello, {name}!&lt;/h1&gt;;
+
+// JSX with attributes
+const image = &lt;img src="photo.jpg" alt="Profile" /&gt;;
+
+// JSX can contain children
+const element = (
+    &lt;div&gt;
+        &lt;h1&gt;Title&lt;/h1&gt;
+        &lt;p&gt;Paragraph&lt;/p&gt;
+    &lt;/div&gt;
+);
+
+// JavaScript expressions
+const element = &lt;h1&gt;{2 + 2}&lt;/h1&gt;; // 4</code></pre>
+
+                <h3>2. Components</h3>
+                <p>
+                    Components là building blocks của React apps. Có hai types: Function và Class components.
+                </p>
+                
+                <h4>Function Components (Recommended)</h4>
+                <pre><code>// Simple function component
+function Welcome(props) {
+    return &lt;h1&gt;Hello, {props.name}&lt;/h1&gt;;
+}
+
+// Arrow function component
+const Greeting = ({name, age}) => {
+    return (
+        &lt;div&gt;
+            &lt;h2&gt;{name}&lt;/h2&gt;
+            &lt;p&gt;Age: {age}&lt;/p&gt;
+        &lt;/div&gt;
+    );
+};
+
+// Using components
+function App() {
+    return (
+        &lt;div&gt;
+            &lt;Welcome name="John" /&gt;
+            &lt;Greeting name="Alice" age={25} /&gt;
+        &lt;/div&gt;
+    );
+}</code></pre>
+
+                <h3>3. Props</h3>
+                <p>
+                    Props (properties) là read-only data passed từ parent đến child component.
+                </p>
+                <pre><code>function UserCard({name, email, avatar}) {
+    return (
+        &lt;div className="card"&gt;
+            &lt;img src={avatar} alt={name} /&gt;
+            &lt;h3&gt;{name}&lt;/h3&gt;
+            &lt;p&gt;{email}&lt;/p&gt;
+        &lt;/div&gt;
+    );
+}
+
+// Using with props
+function App() {
+    const user = {
+        name: "John Doe",
+        email: "john@example.com",
+        avatar: "avatar.jpg"
+    };
+    
+    return &lt;UserCard {...user} /&gt;;
+}
+
+// Default props
+UserCard.defaultProps = {
+    avatar: "default.jpg"
+};</code></pre>
+
+                <h3>4. State với useState Hook</h3>
+                <p>
+                    State là data riêng của component và có thể change over time.
+                </p>
+                <pre><code>import { useState } from 'react';
+
+function Counter() {
+    const [count, setCount] = useState(0);
+    
+    return (
+        &lt;div&gt;
+            &lt;p&gt;Count: {count}&lt;/p&gt;
+            &lt;button onClick={() => setCount(count + 1)}&gt;
+                Increment
+            &lt;/button&gt;
+            &lt;button onClick={() => setCount(count - 1)}&gt;
+                Decrement
+            &lt;/button&gt;
+            &lt;button onClick={() => setCount(0)}&gt;
+                Reset
+            &lt;/button&gt;
+        &lt;/div&gt;
+    );
+}
+
+// Multiple state variables
+function Form() {
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log({name, email});
+    };
+    
+    return (
+        &lt;form onSubmit={handleSubmit}&gt;
+            &lt;input 
+                value={name} 
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Name"
+            /&gt;
+            &lt;input 
+                value={email} 
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email"
+            /&gt;
+            &lt;button type="submit"&gt;Submit&lt;/button&gt;
+        &lt;/form&gt;
+    );
+}</code></pre>
+
+                <h3>5. useEffect Hook</h3>
+                <p>
+                    useEffect cho phép perform side effects trong function components.
+                </p>
+                <pre><code>import { useState, useEffect } from 'react';
+
+function UserProfile({ userId }) {
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+    
+    useEffect(() => {
+        // This runs after component mounts and when userId changes
+        fetch(`/api/users/${userId}`)
+            .then(res => res.json())
+            .then(data => {
+                setUser(data);
+                setLoading(false);
+            });
+        
+        // Cleanup function (optional)
+        return () => {
+            console.log('Cleanup');
+        };
+    }, [userId]); // Dependency array
+    
+    if (loading) return &lt;div&gt;Loading...&lt;/div&gt;;
+    
+    return (
+        &lt;div&gt;
+            &lt;h2&gt;{user.name}&lt;/h2&gt;
+            &lt;p&gt;{user.email}&lt;/p&gt;
+        &lt;/div&gt;
+    );
+}
+
+// Run only once on mount
+useEffect(() => {
+    console.log('Component mounted');
+}, []); // Empty dependency array
+
+// Run on every render
+useEffect(() => {
+    console.log('Component rendered');
+}); // No dependency array</code></pre>
+
+                <h3>6. Event Handling</h3>
+                <pre><code>function ButtonComponent() {
+    const handleClick = (e) => {
+        e.preventDefault();
+        console.log('Button clicked');
+    };
+    
+    const handleMouseEnter = () => {
+        console.log('Mouse entered');
+    };
+    
+    return (
+        &lt;div&gt;
+            &lt;button onClick={handleClick}&gt;
+                Click Me
+            &lt;/button&gt;
+            
+            &lt;button onClick={() => console.log('Inline handler')}&gt;
+                Inline
+            &lt;/button&gt;
+            
+            &lt;div onMouseEnter={handleMouseEnter}&gt;
+                Hover me
+            &lt;/div&gt;
+        &lt;/div&gt;
+    );
+}</code></pre>
+
+                <h3>7. Conditional Rendering</h3>
+                <pre><code>function UserGreeting({ isLoggedIn, user }) {
+    // If-else
+    if (isLoggedIn) {
+        return &lt;h1&gt;Welcome back, {user.name}!&lt;/h1&gt;;
+    }
+    return &lt;h1&gt;Please sign in&lt;/h1&gt;;
+    
+    // Ternary operator
+    return (
+        &lt;div&gt;
+            {isLoggedIn ? (
+                &lt;h1&gt;Welcome, {user.name}&lt;/h1&gt;
+            ) : (
+                &lt;h1&gt;Please log in&lt;/h1&gt;
+            )}
+        &lt;/div&gt;
+    );
+    
+    // Logical AND
+    return (
+        &lt;div&gt;
+            {isLoggedIn && &lt;h1&gt;Welcome, {user.name}&lt;/h1&gt;}
+        &lt;/div&gt;
+    );
+}</code></pre>
+
+                <h3>8. Lists và Keys</h3>
+                <pre><code>function TodoList({ todos }) {
+    return (
+        &lt;ul&gt;
+            {todos.map((todo) => (
+                &lt;li key={todo.id}&gt;
+                    {todo.text}
+                &lt;/li&gt;
+            ))}
+        &lt;/ul&gt;
+    );
+}
+
+// More complex example
+function UserList({ users }) {
+    return (
+        &lt;div&gt;
+            {users.map((user) => (
+                &lt;UserCard 
+                    key={user.id}
+                    name={user.name}
+                    email={user.email}
+                /&gt;
+            ))}
+        &lt;/div&gt;
+    );
+}</code></pre>
+
+                <h3>9. Forms</h3>
+                <pre><code>function ContactForm() {
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        message: ''
+    });
+    
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+    
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log('Form submitted:', formData);
+    };
+    
+    return (
+        &lt;form onSubmit={handleSubmit}&gt;
+            &lt;input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="Name"
+            /&gt;
+            &lt;input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="Email"
+            /&gt;
+            &lt;textarea
+                name="message"
+                value={formData.message}
+                onChange={handleChange}
+                placeholder="Message"
+            /&gt;
+            &lt;button type="submit"&gt;Send&lt;/button&gt;
+        &lt;/form&gt;
+    );
+}</code></pre>
+
+                <h2>Advanced Hooks</h2>
+
+                <h3>useContext</h3>
+                <pre><code>import { createContext, useContext, useState } from 'react';
+
+// Create context
+const ThemeContext = createContext();
+
+// Provider component
+function ThemeProvider({ children }) {
+    const [theme, setTheme] = useState('light');
+    
+    return (
+        &lt;ThemeContext.Provider value={{ theme, setTheme }}&gt;
+            {children}
+        &lt;/ThemeContext.Provider&gt;
+    );
+}
+
+// Consumer component
+function ThemedButton() {
+    const { theme, setTheme } = useContext(ThemeContext);
+    
+    return (
+        &lt;button 
+            style={{ background: theme === 'dark' ? '#333' : '#fff' }}
+            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+        &gt;
+            Toggle Theme
+        &lt;/button&gt;
+    );
+}</code></pre>
+
+                <h3>useReducer</h3>
+                <pre><code>import { useReducer } from 'react';
+
+const initialState = { count: 0 };
+
+function reducer(state, action) {
+    switch (action.type) {
+        case 'increment':
+            return { count: state.count + 1 };
+        case 'decrement':
+            return { count: state.count - 1 };
+        case 'reset':
+            return initialState;
+        default:
+            throw new Error();
+    }
+}
+
+function Counter() {
+    const [state, dispatch] = useReducer(reducer, initialState);
+    
+    return (
+        &lt;div&gt;
+            Count: {state.count}
+            &lt;button onClick={() => dispatch({ type: 'increment' })}&gt;
+                +
+            &lt;/button&gt;
+            &lt;button onClick={() => dispatch({ type: 'decrement' })}&gt;
+                -
+            &lt;/button&gt;
+            &lt;button onClick={() => dispatch({ type: 'reset' })}&gt;
+                Reset
+            &lt;/button&gt;
+        &lt;/div&gt;
+    );
+}</code></pre>
+
+                <h2>React Ecosystem</h2>
+                <ul>
+                    <li><strong>React Router:</strong> Navigation và routing</li>
+                    <li><strong>Redux/Zustand:</strong> State management</li>
+                    <li><strong>React Query:</strong> Data fetching và caching</li>
+                    <li><strong>Styled Components:</strong> CSS-in-JS</li>
+                    <li><strong>Material-UI/Chakra UI:</strong> Component libraries</li>
+                    <li><strong>Next.js:</strong> React framework với SSR</li>
+                </ul>
+
+                <h2>Best Practices</h2>
+                <ul>
+                    <li>Keep components small và focused</li>
+                    <li>Use functional components và hooks</li>
+                    <li>Properly use dependency arrays trong useEffect</li>
+                    <li>Always provide keys khi rendering lists</li>
+                    <li>Lift state up khi cần share giữa components</li>
+                    <li>Use custom hooks để reuse logic</li>
+                    <li>Avoid unnecessary re-renders với React.memo</li>
+                    <li>Follow component naming conventions</li>
+                </ul>
+
+                <h2>Kết luận</h2>
+                <p>
+                    React đã revolutionize cách build web applications. Với component-based architecture 
+                    và powerful features như hooks, React giúp developers build complex UIs một cách 
+                    maintainable và efficient. Master React là essential skill cho modern frontend development.
+                </p>
+
+                <a href="../index.html" class="back-link">← Quay lại trang chủ</a>
+            </article>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Developer Blog. All rights reserved.</p>
+            <p>Made with ❤️ and code</p>
+        </div>
+    </footer>
+</body>
+</html>

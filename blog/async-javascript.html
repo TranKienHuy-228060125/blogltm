@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asynchronous JavaScript - Developer Blog</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <h2>DEV BLOG</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="../index.html">Trang chủ</a></li>
+                <li><a href="../about.html">Giới thiệu</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="article-hero">
+        <div class="container">
+            <div class="article-header">
+                <span class="blog-category">JavaScript</span>
+                <h1>Asynchronous JavaScript: Callbacks, Promises và Async/Await</h1>
+                <div class="article-meta">
+                    <span>📅 24/10/2025</span>
+                    <span>⏱️ 15 phút đọc</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="article-content">
+        <div class="container">
+            <article class="article-body">
+                <h2>Asynchronous Programming là gì?</h2>
+                <p>
+                    Asynchronous programming là programming paradigm cho phép code execute independently 
+                    của main program flow. Trong JavaScript, async operations không block execution của code 
+                    khác, allowing programs để perform long-running operations (như network requests, file I/O) 
+                    mà không freeze UI hoặc block other operations.
+                </p>
+
+                <h2>Synchronous vs Asynchronous</h2>
+                <pre><code>// Synchronous - blocks execution
+console.log('First');
+console.log('Second');
+console.log('Third');
+// Output: First, Second, Third
+
+// Asynchronous - doesn't block
+console.log('First');
+setTimeout(() => {
+    console.log('Second');
+}, 1000);
+console.log('Third');
+// Output: First, Third, Second (after 1 second)</code></pre>
+
+                <h2>1. Callbacks</h2>
+                <p>
+                    Callback là function được pass as argument vào function khác và được execute sau khi 
+                    async operation completes.
+                </p>
+
+                <h3>Basic Callbacks</h3>
+                <pre><code>// Simple callback
+function fetchData(callback) {
+    setTimeout(() => {
+        const data = { name: 'John', age: 30 };
+        callback(data);
+    }, 1000);
+}
+
+fetchData((data) => {
+    console.log('Data received:', data);
+});
+
+// Error-first callback pattern (Node.js style)
+function readFile(filename, callback) {
+    setTimeout(() => {
+        if (filename === 'error.txt') {
+            callback(new Error('File not found'), null);
+        } else {
+            callback(null, 'File contents here');
+        }
+    }, 1000);
+}
+
+readFile('data.txt', (error, data) => {
+    if (error) {
+        console.error('Error:', error.message);
+    } else {
+        console.log('Data:', data);
+    }
+});</code></pre>
+
+                <h3>Callback Hell</h3>
+                <p>
+                    Khi có nhiều async operations phụ thuộc lẫn nhau, callbacks có thể lead to deeply 
+                    nested code (callback hell or pyramid of doom).
+                </p>
+                <pre><code>// Callback hell example
+getUser(userId, (error, user) => {
+    if (error) {
+        console.error(error);
+    } else {
+        getOrders(user.id, (error, orders) => {
+            if (error) {
+                console.error(error);
+            } else {
+                getOrderDetails(orders[0].id, (error, details) => {
+                    if (error) {
+                        console.error(error);
+                    } else {
+                        console.log(details);
+                    }
+                });
+            }
+        });
+    }
+});
+// This becomes hard to read and maintain!</code></pre>
+
+                <h2>2. Promises</h2>
+                <p>
+                    Promise là object representing eventual completion (or failure) của async operation 
+                    và its resulting value. Promises solve callback hell bằng cách provide cleaner syntax 
+                    cho chaining async operations.
+                </p>
+
+                <h3>Creating Promises</h3>
+                <pre><code>// Creating a promise
+const myPromise = new Promise((resolve, reject) => {
+    setTimeout(() => {
+        const success = true;
+        if (success) {
+            resolve('Operation successful!');
+        } else {
+            reject(new Error('Operation failed!'));
+        }
+    }, 1000);
+});
+
+// Using promises
+myPromise
+    .then(result => {
+        console.log(result);
+    })
+    .catch(error => {
+        console.error(error);
+    })
+    .finally(() => {
+        console.log('Promise completed');
+    });</code></pre>
+
+                <h3>Promise States</h3>
+                <p>
+                    Một promise có thể ở 3 states:
+                </p>
+                <ul>
+                    <li><strong>Pending:</strong> Initial state, chưa fulfilled hay rejected</li>
+                    <li><strong>Fulfilled:</strong> Operation completed successfully</li>
+                    <li><strong>Rejected:</strong> Operation failed</li>
+                </ul>
+
+                <h3>Promise Chaining</h3>
+                <pre><code>// Promise chaining
+fetch('https://api.example.com/user/1')
+    .then(response => response.json())
+    .then(user => {
+        console.log('User:', user);
+        return fetch(`https://api.example.com/orders?userId=${user.id}`);
+    })
+    .then(response => response.json())
+    .then(orders => {
+        console.log('Orders:', orders);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+
+// Returning promises in chain
+function getUser(id) {
+    return fetch(`/api/users/${id}`)
+        .then(response => response.json());
+}
+
+function getOrders(userId) {
+    return fetch(`/api/orders?userId=${userId}`)
+        .then(response => response.json());
+}
+
+getUser(1)
+    .then(user => getOrders(user.id))
+    .then(orders => console.log(orders))
+    .catch(error => console.error(error));</code></pre>
+
+                <h3>Promise Combinators</h3>
+                <pre><code>// Promise.all - wait for all promises
+const promise1 = fetch('/api/users');
+const promise2 = fetch('/api/posts');
+const promise3 = fetch('/api/comments');
+
+Promise.all([promise1, promise2, promise3])
+    .then(responses => Promise.all(responses.map(r => r.json())))
+    .then(([users, posts, comments]) => {
+        console.log('Users:', users);
+        console.log('Posts:', posts);
+        console.log('Comments:', comments);
+    })
+    .catch(error => console.error('One of the requests failed:', error));
+
+// Promise.allSettled - wait for all, không reject nếu một fails
+Promise.allSettled([promise1, promise2, promise3])
+    .then(results => {
+        results.forEach((result) => {
+            if (result.status === 'fulfilled') {
+                console.log('Success:', result.value);
+            } else {
+                console.log('Failed:', result.reason);
+            }
+        });
+    });
+
+// Promise.race - first to settle (fulfill or reject)
+Promise.race([promise1, promise2, promise3])
+    .then(result => console.log('First to complete:', result))
+    .catch(error => console.error('First to fail:', error));
+
+// Promise.any - first to fulfill (ignores rejections)
+Promise.any([promise1, promise2, promise3])
+    .then(result => console.log('First successful:', result))
+    .catch(error => console.error('All failed:', error));</code></pre>
+
+                <h2>3. Async/Await</h2>
+                <p>
+                    Async/await là syntactic sugar built on top of promises, making async code look và 
+                    behave more like synchronous code. Nó easier to read và write than promise chains.
+                </p>
+
+                <h3>Basic Async/Await</h3>
+                <pre><code>// Async function returns a promise
+async function fetchUser(id) {
+    const response = await fetch(`/api/users/${id}`);
+    const user = await response.json();
+    return user;
+}
+
+// Using async function
+fetchUser(1)
+    .then(user => console.log(user))
+    .catch(error => console.error(error));
+
+// Or with async/await
+async function main() {
+    try {
+        const user = await fetchUser(1);
+        console.log(user);
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+main();</code></pre>
+
+                <h3>Error Handling với Async/Await</h3>
+                <pre><code>async function getUserData(id) {
+    try {
+        const response = await fetch(`/api/users/${id}`);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const user = await response.json();
+        return user;
+    } catch (error) {
+        console.error('Failed to fetch user:', error);
+        throw error; // Re-throw for caller to handle
+    }
+}
+
+// Using with error handling
+async function displayUser() {
+    try {
+        const user = await getUserData(1);
+        console.log('User:', user);
+    } catch (error) {
+        console.error('Error displaying user:', error);
+    }
+}
+
+displayUser();</code></pre>
+
+                <h3>Sequential vs Parallel Execution</h3>
+                <pre><code>// Sequential - slow (waits for each)
+async function sequential() {
+    const user = await fetchUser(1);      // Wait 1s
+    const posts = await fetchPosts(1);    // Wait 1s
+    const comments = await fetchComments(1); // Wait 1s
+    // Total: 3 seconds
+    return {user, posts, comments};
+}
+
+// Parallel - fast (all at once)
+async function parallel() {
+    const [user, posts, comments] = await Promise.all([
+        fetchUser(1),
+        fetchPosts(1),
+        fetchComments(1)
+    ]);
+    // Total: 1 second (longest request)
+    return {user, posts, comments};
+}
+
+// Mixed - some sequential, some parallel
+async function mixed() {
+    const user = await fetchUser(1);
+    // Now fetch posts and comments in parallel
+    const [posts, comments] = await Promise.all([
+        fetchPosts(user.id),
+        fetchComments(user.id)
+    ]);
+    return {user, posts, comments};
+}</code></pre>
+
+                <h3>Async/Await với Loops</h3>
+                <pre><code>// Sequential processing
+async function processSequential(ids) {
+    const results = [];
+    for (const id of ids) {
+        const user = await fetchUser(id);
+        results.push(user);
+    }
+    return results;
+}
+
+// Parallel processing
+async function processParallel(ids) {
+    const promises = ids.map(id => fetchUser(id));
+    const results = await Promise.all(promises);
+    return results;
+}
+
+// Using for-await-of (async iterables)
+async function* fetchUsersGenerator(ids) {
+    for (const id of ids) {
+        yield await fetchUser(id);
+    }
+}
+
+async function processStream(ids) {
+    for await (const user of fetchUsersGenerator(ids)) {
+        console.log('Received user:', user);
+    }
+}</code></pre>
+
+                <h2>Real-World Examples</h2>
+
+                <h3>Fetch API với Async/Await</h3>
+                <pre><code>// GET request
+async function getUsers() {
+    try {
+        const response = await fetch('/api/users');
+        if (!response.ok) throw new Error('Failed to fetch');
+        const users = await response.json();
+        return users;
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+
+// POST request
+async function createUser(userData) {
+    try {
+        const response = await fetch('/api/users', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userData)
+        });
+        
+        if (!response.ok) throw new Error('Failed to create user');
+        const newUser = await response.json();
+        return newUser;
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+
+// PUT request
+async function updateUser(id, userData) {
+    const response = await fetch(`/api/users/${id}`, {
+        method: 'PUT',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(userData)
+    });
+    return await response.json();
+}
+
+// DELETE request
+async function deleteUser(id) {
+    await fetch(`/api/users/${id}`, {
+        method: 'DELETE'
+    });
+}</code></pre>
+
+                <h3>Complex Async Flow</h3>
+                <pre><code>async function completeUserSetup(userData) {
+    try {
+        // Step 1: Create user
+        const user = await createUser(userData);
+        console.log('User created:', user);
+        
+        // Step 2: Send welcome email
+        await sendWelcomeEmail(user.email);
+        console.log('Welcome email sent');
+        
+        // Step 3: Create default settings (parallel)
+        const [profile, preferences] = await Promise.all([
+            createUserProfile(user.id),
+            createUserPreferences(user.id)
+        ]);
+        console.log('Profile and preferences created');
+        
+        // Step 4: Log activity
+        await logUserActivity(user.id, 'account_created');
+        
+        return {user, profile, preferences};
+    } catch (error) {
+        console.error('Setup failed:', error);
+        // Rollback if needed
+        throw error;
+    }
+}</code></pre>
+
+                <h2>Best Practices</h2>
+                <ul>
+                    <li>Prefer async/await over promise chains cho readability</li>
+                    <li>Always handle errors với try-catch trong async functions</li>
+                    <li>Use Promise.all cho parallel operations khi possible</li>
+                    <li>Avoid mixing callbacks và promises</li>
+                    <li>Don't forget to await promises</li>
+                    <li>Use Promise.allSettled khi cần results của all promises</li>
+                    <li>Consider timeout mechanisms cho long-running operations</li>
+                    <li>Be careful với async/await trong loops</li>
+                </ul>
+
+                <h2>Common Pitfalls</h2>
+                <pre><code>// ❌ Forgetting await
+async function bad() {
+    const data = fetchData(); // Returns promise, not data!
+    console.log(data); // Promise object
+}
+
+// ✅ Correct
+async function good() {
+    const data = await fetchData();
+    console.log(data); // Actual data
+}
+
+// ❌ Not handling errors
+async function bad2() {
+    const data = await fetchData(); // Unhandled rejection if fails
+}
+
+// ✅ Correct
+async function good2() {
+    try {
+        const data = await fetchData();
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+// ❌ Sequential when could be parallel
+async function slow() {
+    const user = await fetchUser();
+    const posts = await fetchPosts();
+}
+
+// ✅ Parallel
+async function fast() {
+    const [user, posts] = await Promise.all([
+        fetchUser(),
+        fetchPosts()
+    ]);
+}</code></pre>
+
+                <h2>Kết luận</h2>
+                <p>
+                    Asynchronous programming là fundamental concept trong JavaScript. Từ callbacks đến 
+                    promises và cuối cùng là async/await, JavaScript đã evolved để make async code easier 
+                    to write và understand. Async/await provides clean syntax mà feels synchronous nhưng 
+                    maintains benefits của asynchronous execution. Mastering these concepts là crucial cho 
+                    modern JavaScript development, especially khi working với APIs, databases, và I/O operations.
+                </p>
+
+                <a href="../index.html" class="back-link">← Quay lại trang chủ</a>
+            </article>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Developer Blog. All rights reserved.</p>
+            <p>Made with ❤️ and code</p>
+        </div>
+    </footer>
+</body>
+</html>

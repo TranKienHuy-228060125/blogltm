@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spring Framework và Spring Boot - Developer Blog</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <h2>DEV BLOG</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="../index.html">Trang chủ</a></li>
+                <li><a href="../about.html">Giới thiệu</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="article-hero">
+        <div class="container">
+            <div class="article-header">
+                <span class="blog-category">Java</span>
+                <h1>Spring Framework và Spring Boot</h1>
+                <div class="article-meta">
+                    <span>📅 24/10/2025</span>
+                    <span>⏱️ 14 phút đọc</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="article-content">
+        <div class="container">
+            <article class="article-body">
+                <h2>Spring Framework là gì?</h2>
+                <p>
+                    Spring Framework là một framework mã nguồn mở phổ biến nhất cho Java platform. 
+                    Nó cung cấp comprehensive infrastructure support để phát triển Java applications. 
+                    Spring được thiết kế để đơn giản hóa enterprise Java development và promote good 
+                    programming practices.
+                </p>
+
+                <h2>Tại sao Spring phổ biến?</h2>
+                <ul>
+                    <li><strong>Lightweight:</strong> Không require special deployment server</li>
+                    <li><strong>Inversion of Control (IoC):</strong> Quản lý lifecycle và dependencies của objects</li>
+                    <li><strong>Aspect Oriented Programming (AOP):</strong> Tách cross-cutting concerns</li>
+                    <li><strong>Transaction Management:</strong> Unified API cho transaction management</li>
+                    <li><strong>MVC Framework:</strong> Powerful web framework</li>
+                    <li><strong>Exception Handling:</strong> Comprehensive exception handling</li>
+                </ul>
+
+                <h2>Core Concepts của Spring</h2>
+
+                <h3>1. Dependency Injection (DI)</h3>
+                <p>
+                    Dependency Injection là design pattern mà Spring implement thông qua IoC container. 
+                    Thay vì objects tự tạo dependencies của chúng, Spring container inject dependencies 
+                    vào objects.
+                </p>
+                <pre><code>// Without DI - tight coupling
+public class UserService {
+    private UserRepository repository = new UserRepository();
+    // Tightly coupled with UserRepository implementation
+}
+
+// With DI - loose coupling
+public class UserService {
+    private final UserRepository repository;
+    
+    // Constructor injection (recommended)
+    public UserService(UserRepository repository) {
+        this.repository = repository;
+    }
+}
+
+// Spring configuration
+@Configuration
+public class AppConfig {
+    @Bean
+    public UserRepository userRepository() {
+        return new UserRepository();
+    }
+    
+    @Bean
+    public UserService userService(UserRepository repository) {
+        return new UserService(repository);
+    }
+}</code></pre>
+
+                <h3>2. Inversion of Control (IoC)</h3>
+                <p>
+                    IoC là principle mà control flow của program được inverted. Thay vì code của bạn 
+                    gọi framework, framework gọi code của bạn. Spring IoC container manage lifecycle 
+                    của beans và inject dependencies.
+                </p>
+
+                <h3>3. Spring Beans và Application Context</h3>
+                <p>
+                    Bean là object được managed bởi Spring IoC container. ApplicationContext là central 
+                    interface của Spring IoC container.
+                </p>
+                <pre><code>// Annotation-based configuration
+@Component
+public class EmailService {
+    public void sendEmail(String to, String message) {
+        // Send email logic
+    }
+}
+
+@Service
+public class NotificationService {
+    private final EmailService emailService;
+    
+    @Autowired // Optional trong constructor injection
+    public NotificationService(EmailService emailService) {
+        this.emailService = emailService;
+    }
+    
+    public void notify(String user, String message) {
+        emailService.sendEmail(user, message);
+    }
+}</code></pre>
+
+                <h2>Spring Boot</h2>
+                <p>
+                    Spring Boot là extension của Spring Framework để simplify setup và development. 
+                    Nó provide:
+                </p>
+                <ul>
+                    <li>Auto-configuration</li>
+                    <li>Embedded servers (Tomcat, Jetty)</li>
+                    <li>Starter dependencies</li>
+                    <li>Production-ready features (metrics, health checks)</li>
+                    <li>No XML configuration required</li>
+                </ul>
+
+                <h3>Tạo Spring Boot Application</h3>
+                <pre><code>@SpringBootApplication
+public class MyApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(MyApplication.class, args);
+    }
+}
+
+// REST Controller
+@RestController
+@RequestMapping("/api/users")
+public class UserController {
+    private final UserService userService;
+    
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+    
+    @GetMapping
+    public List&lt;User&gt; getAllUsers() {
+        return userService.findAll();
+    }
+    
+    @GetMapping("/{id}")
+    public User getUserById(@PathVariable Long id) {
+        return userService.findById(id);
+    }
+    
+    @PostMapping
+    public User createUser(@RequestBody User user) {
+        return userService.save(user);
+    }
+    
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable Long id) {
+        userService.delete(id);
+    }
+}</code></pre>
+
+                <h2>Spring Data JPA</h2>
+                <p>
+                    Spring Data JPA simplify database access. Bạn chỉ cần define interface và Spring 
+                    sẽ provide implementation.
+                </p>
+                <pre><code>// Entity
+@Entity
+@Table(name = "users")
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @Column(nullable = false)
+    private String name;
+    
+    @Column(unique = true)
+    private String email;
+    
+    // Getters and setters
+}
+
+// Repository
+public interface UserRepository extends JpaRepository&lt;User, Long&gt; {
+    // Spring tự động implement basic CRUD operations
+    
+    // Custom query methods
+    List&lt;User&gt; findByName(String name);
+    
+    User findByEmail(String email);
+    
+    @Query("SELECT u FROM User u WHERE u.name LIKE %:keyword%")
+    List&lt;User&gt; searchByName(@Param("keyword") String keyword);
+}
+
+// Service
+@Service
+public class UserService {
+    private final UserRepository userRepository;
+    
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+    
+    public List&lt;User&gt; findAll() {
+        return userRepository.findAll();
+    }
+    
+    public User findById(Long id) {
+        return userRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+    }
+    
+    public User save(User user) {
+        return userRepository.save(user);
+    }
+}</code></pre>
+
+                <h2>Spring Security</h2>
+                <p>
+                    Spring Security provide authentication và authorization. Bạn có thể secure REST APIs 
+                    dễ dàng.
+                </p>
+                <pre><code>@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+    
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+            .csrf().disable()
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/api/public/**").permitAll()
+                .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                .anyRequest().authenticated()
+            )
+            .httpBasic();
+        return http.build();
+    }
+}</code></pre>
+
+                <h2>Application Properties</h2>
+                <p>
+                    Spring Boot sử dụng application.properties hoặc application.yml để configuration.
+                </p>
+                <pre><code># application.properties
+server.port=8080
+spring.application.name=my-app
+
+# Database configuration
+spring.datasource.url=jdbc:mysql://localhost:3306/mydb
+spring.datasource.username=root
+spring.datasource.password=password
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+
+# Logging
+logging.level.com.example=DEBUG
+logging.file.name=app.log</code></pre>
+
+                <h2>Spring Boot Starters</h2>
+                <p>
+                    Starters là convenient dependency descriptors. Thêm một starter sẽ pull tất cả 
+                    dependencies cần thiết.
+                </p>
+                <pre><code>&lt;dependencies&gt;
+    &lt;!-- Web applications --&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    
+    &lt;!-- JPA --&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-data-jpa&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    
+    &lt;!-- Security --&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-security&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    
+    &lt;!-- MySQL Driver --&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;mysql&lt;/groupId&gt;
+        &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;</code></pre>
+
+                <h2>Exception Handling</h2>
+                <pre><code>@RestControllerAdvice
+public class GlobalExceptionHandler {
+    
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity&lt;ErrorResponse&gt; handleNotFound(ResourceNotFoundException ex) {
+        ErrorResponse error = new ErrorResponse(
+            HttpStatus.NOT_FOUND.value(),
+            ex.getMessage(),
+            System.currentTimeMillis()
+        );
+        return new ResponseEntity&lt;&gt;(error, HttpStatus.NOT_FOUND);
+    }
+    
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity&lt;ErrorResponse&gt; handleGeneral(Exception ex) {
+        ErrorResponse error = new ErrorResponse(
+            HttpStatus.INTERNAL_SERVER_ERROR.value(),
+            "Internal server error",
+            System.currentTimeMillis()
+        );
+        return new ResponseEntity&lt;&gt;(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}</code></pre>
+
+                <h2>Testing trong Spring Boot</h2>
+                <pre><code>@SpringBootTest
+public class UserServiceTest {
+    
+    @Autowired
+    private UserService userService;
+    
+    @MockBean
+    private UserRepository userRepository;
+    
+    @Test
+    public void testFindById() {
+        User user = new User(1L, "John", "john@example.com");
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        
+        User found = userService.findById(1L);
+        
+        assertEquals("John", found.getName());
+    }
+}
+
+@WebMvcTest(UserController.class)
+public class UserControllerTest {
+    
+    @Autowired
+    private MockMvc mockMvc;
+    
+    @MockBean
+    private UserService userService;
+    
+    @Test
+    public void testGetAllUsers() throws Exception {
+        mockMvc.perform(get("/api/users"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+    }
+}</code></pre>
+
+                <h2>Best Practices</h2>
+                <ul>
+                    <li>Sử dụng constructor injection thay vì field injection</li>
+                    <li>Keep business logic trong service layer</li>
+                    <li>Use DTOs để transfer data giữa layers</li>
+                    <li>Implement proper exception handling</li>
+                    <li>Write unit và integration tests</li>
+                    <li>Use profiles cho different environments (dev, test, prod)</li>
+                    <li>Enable actuator endpoints cho monitoring</li>
+                    <li>Document APIs với Swagger/OpenAPI</li>
+                </ul>
+
+                <h2>Kết luận</h2>
+                <p>
+                    Spring Framework và Spring Boot là tools essential cho Java backend development. 
+                    Spring cung cấp powerful features cho enterprise applications, trong khi Spring Boot 
+                    simplify configuration và deployment. Với Spring, bạn có thể xây dựng scalable, 
+                    maintainable, và production-ready applications một cách nhanh chóng.
+                </p>
+                <p>
+                    Hãy practice bằng cách tạo REST APIs đơn giản và dần dần explore các features 
+                    advanced hơn. Happy coding!
+                </p>
+
+                <a href="../index.html" class="back-link">← Quay lại trang chủ</a>
+            </article>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Developer Blog. All rights reserved.</p>
+            <p>Made with ❤️ and code</p>
+        </div>
+    </footer>
+</body>
+</html>

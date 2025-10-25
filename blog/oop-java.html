@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lập trình hướng đối tượng (OOP) trong Java - Developer Blog</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <h2>DEV BLOG</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="../index.html">Trang chủ</a></li>
+                <li><a href="../about.html">Giới thiệu</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="article-hero">
+        <div class="container">
+            <div class="article-header">
+                <span class="blog-category">Java</span>
+                <h1>Lập trình hướng đối tượng (OOP) trong Java</h1>
+                <div class="article-meta">
+                    <span>📅 24/10/2025</span>
+                    <span>⏱️ 12 phút đọc</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="article-content">
+        <div class="container">
+            <article class="article-body">
+                <h2>OOP là gì?</h2>
+                <p>
+                    Lập trình hướng đối tượng (Object-Oriented Programming - OOP) là một mô hình lập trình 
+                    dựa trên khái niệm "objects" (đối tượng), có thể chứa dữ liệu dưới dạng fields 
+                    (còn gọi là attributes hay properties) và code dưới dạng procedures (còn gọi là methods).
+                </p>
+                <p>
+                    Java là một ngôn ngữ OOP thuần túy, nơi mọi thứ đều xoay quanh classes và objects. 
+                    Hiểu rõ các nguyên lý OOP là chìa khóa để trở thành một Java developer giỏi.
+                </p>
+
+                <h2>4 Tính chất cơ bản của OOP</h2>
+
+                <h3>1. Tính đóng gói (Encapsulation)</h3>
+                <p>
+                    Encapsulation là việc đóng gói dữ liệu (attributes) và các phương thức (methods) 
+                    thao tác trên dữ liệu đó vào trong một đơn vị duy nhất gọi là class. Nó che giấu 
+                    các chi tiết implementation và chỉ expose những gì cần thiết thông qua public methods.
+                </p>
+                <p><strong>Lợi ích của Encapsulation:</strong></p>
+                <ul>
+                    <li>Bảo vệ dữ liệu khỏi truy cập trái phép</li>
+                    <li>Dễ dàng thay đổi implementation mà không ảnh hưởng đến code khác</li>
+                    <li>Tăng tính module và maintainability của code</li>
+                    <li>Kiểm soát được cách dữ liệu được đọc và ghi</li>
+                </ul>
+                <p><strong>Ví dụ:</strong></p>
+                <pre><code>public class BankAccount {
+    // Private attributes - không thể truy cập trực tiếp từ bên ngoài
+    private String accountNumber;
+    private double balance;
+    
+    // Public constructor
+    public BankAccount(String accountNumber, double initialBalance) {
+        this.accountNumber = accountNumber;
+        this.balance = initialBalance;
+    }
+    
+    // Public getter - cho phép đọc balance
+    public double getBalance() {
+        return balance;
+    }
+    
+    // Public method với validation
+    public void deposit(double amount) {
+        if (amount > 0) {
+            balance += amount;
+        }
+    }
+    
+    // Public method với business logic
+    public boolean withdraw(double amount) {
+        if (amount > 0 && balance >= amount) {
+            balance -= amount;
+            return true;
+        }
+        return false;
+    }
+}</code></pre>
+
+                <h3>2. Tính kế thừa (Inheritance)</h3>
+                <p>
+                    Inheritance cho phép một class (subclass/child class) kế thừa các attributes và methods 
+                    từ class khác (superclass/parent class). Điều này giúp tái sử dụng code và tạo ra 
+                    mối quan hệ phân cấp giữa các classes.
+                </p>
+                <p><strong>Lợi ích của Inheritance:</strong></p>
+                <ul>
+                    <li>Code reusability - tránh lặp code</li>
+                    <li>Tạo cấu trúc phân cấp rõ ràng</li>
+                    <li>Dễ dàng mở rộng functionality</li>
+                    <li>Method overriding cho polymorphism</li>
+                </ul>
+                <p><strong>Ví dụ:</strong></p>
+                <pre><code>// Parent class
+public class Animal {
+    protected String name;
+    
+    public Animal(String name) {
+        this.name = name;
+    }
+    
+    public void eat() {
+        System.out.println(name + " is eating");
+    }
+    
+    public void sleep() {
+        System.out.println(name + " is sleeping");
+    }
+}
+
+// Child class kế thừa từ Animal
+public class Dog extends Animal {
+    private String breed;
+    
+    public Dog(String name, String breed) {
+        super(name); // Gọi constructor của parent class
+        this.breed = breed;
+    }
+    
+    // Method riêng của Dog
+    public void bark() {
+        System.out.println(name + " is barking");
+    }
+    
+    // Override method của parent class
+    @Override
+    public void eat() {
+        System.out.println(name + " the dog is eating dog food");
+    }
+}</code></pre>
+
+                <h3>3. Tính đa hình (Polymorphism)</h3>
+                <p>
+                    Polymorphism có nghĩa là "nhiều hình dạng". Nó cho phép một interface hoặc method 
+                    có thể có nhiều implementations khác nhau. Có hai loại polymorphism trong Java:
+                </p>
+                <p><strong>Compile-time Polymorphism (Method Overloading):</strong></p>
+                <pre><code>public class Calculator {
+    // Cùng tên method nhưng khác parameters
+    public int add(int a, int b) {
+        return a + b;
+    }
+    
+    public double add(double a, double b) {
+        return a + b;
+    }
+    
+    public int add(int a, int b, int c) {
+        return a + b + c;
+    }
+}</code></pre>
+
+                <p><strong>Runtime Polymorphism (Method Overriding):</strong></p>
+                <pre><code>public class Shape {
+    public void draw() {
+        System.out.println("Drawing a shape");
+    }
+}
+
+public class Circle extends Shape {
+    @Override
+    public void draw() {
+        System.out.println("Drawing a circle");
+    }
+}
+
+public class Rectangle extends Shape {
+    @Override
+    public void draw() {
+        System.out.println("Drawing a rectangle");
+    }
+}
+
+// Sử dụng
+Shape shape1 = new Circle();
+Shape shape2 = new Rectangle();
+shape1.draw(); // Output: Drawing a circle
+shape2.draw(); // Output: Drawing a rectangle</code></pre>
+
+                <h3>4. Tính trừu tượng (Abstraction)</h3>
+                <p>
+                    Abstraction là quá trình ẩn đi các chi tiết implementation phức tạp và chỉ hiển thị 
+                    những tính năng thiết yếu. Trong Java, abstraction được thực hiện thông qua 
+                    abstract classes và interfaces.
+                </p>
+                <p><strong>Abstract Class:</strong></p>
+                <pre><code>public abstract class Vehicle {
+    protected String brand;
+    
+    public Vehicle(String brand) {
+        this.brand = brand;
+    }
+    
+    // Abstract method - không có implementation
+    public abstract void start();
+    
+    // Concrete method
+    public void displayBrand() {
+        System.out.println("Brand: " + brand);
+    }
+}
+
+public class Car extends Vehicle {
+    public Car(String brand) {
+        super(brand);
+    }
+    
+    @Override
+    public void start() {
+        System.out.println("Car is starting with key");
+    }
+}</code></pre>
+
+                <p><strong>Interface:</strong></p>
+                <pre><code>public interface Drawable {
+    void draw(); // public abstract by default
+    
+    // Default method (Java 8+)
+    default void display() {
+        System.out.println("Displaying shape");
+    }
+}
+
+public class Triangle implements Drawable {
+    @Override
+    public void draw() {
+        System.out.println("Drawing triangle");
+    }
+}</code></pre>
+
+                <h2>Class và Object</h2>
+                
+                <h3>Class</h3>
+                <p>
+                    Class là blueprint (bản thiết kế) để tạo ra objects. Nó định nghĩa properties 
+                    (attributes) và behaviors (methods) mà objects sẽ có.
+                </p>
+
+                <h3>Object</h3>
+                <p>
+                    Object là một instance (thực thể) của class. Khi một class được defined, không có 
+                    memory nào được cấp phát cho đến khi object được tạo ra.
+                </p>
+
+                <pre><code>// Định nghĩa class
+public class Student {
+    private String name;
+    private int age;
+    
+    public Student(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+    
+    public void study() {
+        System.out.println(name + " is studying");
+    }
+}
+
+// Tạo objects
+Student student1 = new Student("John", 20);
+Student student2 = new Student("Alice", 22);
+student1.study(); // John is studying</code></pre>
+
+                <h2>Các khái niệm quan trọng khác</h2>
+
+                <h3>Constructor</h3>
+                <p>
+                    Constructor là một method đặc biệt được gọi khi object được tạo. Nó có cùng tên với 
+                    class và không có return type.
+                </p>
+
+                <h3>this keyword</h3>
+                <p>
+                    <code>this</code> là reference đến object hiện tại. Nó được dùng để phân biệt giữa 
+                    instance variables và parameters có cùng tên.
+                </p>
+
+                <h3>super keyword</h3>
+                <p>
+                    <code>super</code> được dùng để refer đến parent class. Có thể dùng để gọi 
+                    constructor hoặc methods của parent class.
+                </p>
+
+                <h2>Best Practices</h2>
+                <ul>
+                    <li>Luôn sử dụng encapsulation - declare fields là private và provide public getters/setters</li>
+                    <li>Favor composition over inheritance khi có thể</li>
+                    <li>Design với interfaces để tăng flexibility</li>
+                    <li>Override equals() và hashCode() khi cần thiết</li>
+                    <li>Sử dụng abstract classes khi có shared implementation</li>
+                    <li>Keep classes focused - Single Responsibility Principle</li>
+                </ul>
+
+                <h2>Kết luận</h2>
+                <p>
+                    OOP là nền tảng của Java programming. Hiểu rõ và áp dụng đúng 4 tính chất của OOP 
+                    sẽ giúp bạn viết code clean, maintainable và scalable hơn. Encapsulation giúp bảo vệ 
+                    dữ liệu, Inheritance cho phép code reuse, Polymorphism mang lại flexibility, và 
+                    Abstraction giúp quản lý complexity.
+                </p>
+                <p>
+                    Hãy thực hành nhiều với các concepts này để thành thạo OOP trong Java. Trong bài 
+                    viết tiếp theo, chúng ta sẽ tìm hiểu về Java Collections Framework!
+                </p>
+
+                <a href="../index.html" class="back-link">← Quay lại trang chủ</a>
+            </article>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Developer Blog. All rights reserved.</p>
+            <p>Made with ❤️ and code</p>
+        </div>
+    </footer>
+</body>
+</html>

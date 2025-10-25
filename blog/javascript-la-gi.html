@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript là gì? Từ cơ bản đến nâng cao - Developer Blog</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <h2>DEV BLOG</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="../index.html">Trang chủ</a></li>
+                <li><a href="../about.html">Giới thiệu</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="article-hero">
+        <div class="container">
+            <div class="article-header">
+                <span class="blog-category">JavaScript</span>
+                <h1>JavaScript là gì? Từ cơ bản đến nâng cao</h1>
+                <div class="article-meta">
+                    <span>📅 24/10/2025</span>
+                    <span>⏱️ 12 phút đọc</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="article-content">
+        <div class="container">
+            <article class="article-body">
+                <h2>JavaScript là gì?</h2>
+                <p>
+                    JavaScript là một ngôn ngữ lập trình high-level, interpreted, và dynamic được tạo ra 
+                    để làm cho web pages interactive. Ngày nay, JavaScript không chỉ chạy trên browsers 
+                    mà còn chạy trên servers (Node.js), mobile apps (React Native), desktop apps (Electron), 
+                    và nhiều nơi khác.
+                </p>
+
+                <h2>Lịch sử JavaScript</h2>
+                <p>
+                    JavaScript được Brendan Eich tạo ra chỉ trong 10 ngày vào năm 1995 khi ông làm việc 
+                    cho Netscape. Ban đầu được gọi là Mocha, sau đó đổi tên thành LiveScript, và cuối 
+                    cùng là JavaScript. Tên gọi này được chọn vì lợi ích marketing để tận dụng popularity 
+                    của Java, mặc dù hai ngôn ngữ này hoàn toàn khác nhau.
+                </p>
+
+                <h3>Các mốc quan trọng:</h3>
+                <ul>
+                    <li><strong>1995:</strong> JavaScript ra đời</li>
+                    <li><strong>1997:</strong> ECMAScript 1 - tiêu chuẩn đầu tiên</li>
+                    <li><strong>2009:</strong> ES5 với nhiều cải tiến</li>
+                    <li><strong>2015:</strong> ES6/ES2015 - bước ngoặt lớn với nhiều features mới</li>
+                    <li><strong>2016-hiện tại:</strong> Yearly releases với continuous improvements</li>
+                </ul>
+
+                <h2>Đặc điểm của JavaScript</h2>
+
+                <h3>1. Interpreted Language</h3>
+                <p>
+                    JavaScript là interpreted language, code được execute line-by-line bởi JavaScript 
+                    engine (V8 trong Chrome, SpiderMonkey trong Firefox). Không cần compile trước khi run.
+                </p>
+
+                <h3>2. Dynamic Typing</h3>
+                <p>
+                    JavaScript là dynamically typed. Variables không cần declare type và có thể change 
+                    type trong runtime.
+                </p>
+                <pre><code>let variable = 42;        // Number
+variable = "Hello";       // String
+variable = true;          // Boolean
+variable = [1, 2, 3];     // Array
+variable = {name: "John"}; // Object</code></pre>
+
+                <h3>3. Prototype-based</h3>
+                <p>
+                    JavaScript sử dụng prototypes thay vì classical inheritance như Java hay C++.
+                </p>
+
+                <h3>4. First-class Functions</h3>
+                <p>
+                    Functions trong JavaScript là first-class citizens. Chúng có thể được assigned to 
+                    variables, passed as arguments, và returned from functions.
+                </p>
+                <pre><code>// Function as variable
+const greet = function(name) {
+    return `Hello, ${name}!`;
+};
+
+// Function as argument
+function executeFunction(fn, value) {
+    return fn(value);
+}
+
+// Function returning function
+function multiplier(factor) {
+    return function(number) {
+        return number * factor;
+    };
+}</code></pre>
+
+                <h3>5. Event-driven và Asynchronous</h3>
+                <p>
+                    JavaScript được thiết kế để handle events và asynchronous operations efficiently.
+                </p>
+
+                <h2>JavaScript Core Concepts</h2>
+
+                <h3>Variables và Data Types</h3>
+                <pre><code>// Variable declarations
+let age = 25;           // Block-scoped, mutable
+const PI = 3.14159;     // Block-scoped, immutable
+var oldWay = "avoid";   // Function-scoped, hoisted
+
+// Primitive types
+let num = 42;                    // Number
+let str = "Hello";               // String
+let bool = true;                 // Boolean
+let nothing = null;              // Null
+let notDefined;                  // Undefined
+let sym = Symbol('unique');      // Symbol (ES6)
+let bigNum = 123n;               // BigInt (ES2020)
+
+// Reference type
+let obj = {name: "John", age: 30};  // Object
+let arr = [1, 2, 3, 4];             // Array</code></pre>
+
+                <h3>Functions</h3>
+                <pre><code>// Function declaration
+function add(a, b) {
+    return a + b;
+}
+
+// Function expression
+const subtract = function(a, b) {
+    return a - b;
+};
+
+// Arrow function (ES6)
+const multiply = (a, b) => a * b;
+
+// Arrow function with block
+const divide = (a, b) => {
+    if (b === 0) return "Cannot divide by zero";
+    return a / b;
+};
+
+// Default parameters
+function greet(name = "Guest") {
+    return `Hello, ${name}!`;
+}
+
+// Rest parameters
+function sum(...numbers) {
+    return numbers.reduce((total, num) => total + num, 0);
+}</code></pre>
+
+                <h3>Objects và Arrays</h3>
+                <pre><code>// Object
+const person = {
+    name: "John",
+    age: 30,
+    greet() {
+        console.log(`Hi, I'm ${this.name}`);
+    }
+};
+
+// Accessing properties
+console.log(person.name);      // Dot notation
+console.log(person['age']);    // Bracket notation
+
+// Array
+const fruits = ['apple', 'banana', 'orange'];
+
+// Array methods
+fruits.push('grape');          // Add to end
+fruits.pop();                  // Remove from end
+fruits.unshift('strawberry');  // Add to beginning
+fruits.shift();                // Remove from beginning
+
+// Iteration
+fruits.forEach(fruit => console.log(fruit));
+
+// Map, filter, reduce
+const numbers = [1, 2, 3, 4, 5];
+const doubled = numbers.map(n => n * 2);
+const evens = numbers.filter(n => n % 2 === 0);
+const sum = numbers.reduce((acc, n) => acc + n, 0);</code></pre>
+
+                <h3>Control Flow</h3>
+                <pre><code>// If-else
+if (age >= 18) {
+    console.log("Adult");
+} else if (age >= 13) {
+    console.log("Teenager");
+} else {
+    console.log("Child");
+}
+
+// Ternary operator
+const status = age >= 18 ? "Adult" : "Minor";
+
+// Switch
+switch (day) {
+    case "Monday":
+        console.log("Start of week");
+        break;
+    case "Friday":
+        console.log("End of week");
+        break;
+    default:
+        console.log("Mid week");
+}
+
+// Loops
+for (let i = 0; i < 5; i++) {
+    console.log(i);
+}
+
+for (const fruit of fruits) {
+    console.log(fruit);
+}
+
+for (const key in person) {
+    console.log(`${key}: ${person[key]}`);
+}
+
+let count = 0;
+while (count < 5) {
+    console.log(count++);
+}</code></pre>
+
+                <h2>DOM Manipulation</h2>
+                <p>
+                    JavaScript cho phép manipulate HTML và CSS dynamically.
+                </p>
+                <pre><code>// Select elements
+const element = document.getElementById('myId');
+const elements = document.querySelectorAll('.myClass');
+
+// Modify content
+element.textContent = 'New text';
+element.innerHTML = '&lt;strong&gt;Bold text&lt;/strong&gt;';
+
+// Modify styles
+element.style.color = 'red';
+element.style.fontSize = '20px';
+
+// Add/remove classes
+element.classList.add('active');
+element.classList.remove('hidden');
+element.classList.toggle('highlight');
+
+// Event handling
+element.addEventListener('click', function() {
+    console.log('Element clicked!');
+});
+
+// Create and append elements
+const newDiv = document.createElement('div');
+newDiv.textContent = 'New element';
+document.body.appendChild(newDiv);</code></pre>
+
+                <h2>Modern JavaScript Features (ES6+)</h2>
+
+                <h3>Template Literals</h3>
+                <pre><code>const name = "John";
+const age = 30;
+const message = `My name is ${name} and I'm ${age} years old`;
+
+// Multi-line strings
+const multiline = `
+    This is a
+    multi-line
+    string
+`;</code></pre>
+
+                <h3>Destructuring</h3>
+                <pre><code>// Array destructuring
+const [first, second, ...rest] = [1, 2, 3, 4, 5];
+
+// Object destructuring
+const {name, age, city = "Unknown"} = person;
+
+// Function parameter destructuring
+function greet({name, age}) {
+    return `${name} is ${age} years old`;
+}</code></pre>
+
+                <h3>Spread và Rest Operators</h3>
+                <pre><code>// Spread
+const arr1 = [1, 2, 3];
+const arr2 = [...arr1, 4, 5, 6];
+
+const obj1 = {a: 1, b: 2};
+const obj2 = {...obj1, c: 3};
+
+// Rest
+function sum(...numbers) {
+    return numbers.reduce((a, b) => a + b, 0);
+}</code></pre>
+
+                <h2>Tại sao học JavaScript?</h2>
+                <ul>
+                    <li><strong>Universal:</strong> Chạy everywhere - browser, server, mobile, desktop</li>
+                    <li><strong>Beginner-friendly:</strong> Easy to start, no setup required</li>
+                    <li><strong>Huge ecosystem:</strong> NPM với millions of packages</li>
+                    <li><strong>In-demand:</strong> One of the most wanted programming languages</li>
+                    <li><strong>Full-stack:</strong> Có thể làm frontend và backend</li>
+                    <li><strong>Active community:</strong> Massive community và resources</li>
+                </ul>
+
+                <h2>Ứng dụng của JavaScript</h2>
+                <ul>
+                    <li><strong>Web Development:</strong> Frontend với React, Vue, Angular</li>
+                    <li><strong>Backend:</strong> Server-side với Node.js, Express</li>
+                    <li><strong>Mobile Apps:</strong> React Native, Ionic</li>
+                    <li><strong>Desktop Apps:</strong> Electron (VSCode, Slack, Discord)</li>
+                    <li><strong>Game Development:</strong> Phaser, Three.js</li>
+                    <li><strong>IoT:</strong> Johnny-Five framework</li>
+                </ul>
+
+                <h2>Kết luận</h2>
+                <p>
+                    JavaScript đã đi một chặng đường dài từ một scripting language đơn giản đến một trong 
+                    những ngôn ngữ powerful và versatile nhất. Với JavaScript, bạn có thể build bất cứ thứ 
+                    gì từ simple websites đến complex applications. Understanding JavaScript fundamentals 
+                    là foundation cho modern web development.
+                </p>
+                <p>
+                    Trong các bài tiếp theo, chúng ta sẽ dive deeper vào ES6+ features, React, Node.js, 
+                    và asynchronous programming!
+                </p>
+
+                <a href="../index.html" class="back-link">← Quay lại trang chủ</a>
+            </article>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Developer Blog. All rights reserved.</p>
+            <p>Made with ❤️ and code</p>
+        </div>
+    </footer>
+</body>
+</html>
